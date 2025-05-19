@@ -86,21 +86,31 @@ python src/app/main.py
 4. Faça o Push para a Branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
+## 👥 Equipe e Contribuidores
+
+### Equipe Principal
+- [Luis Eduardo Silva Brito](https://github.com/duardo10) - Desenvolvedor Full Stack
+- [Jeanderson Gomes de Sousa](https://github.com/JeandsGomes) - Desenvolvedor Back-End especializado em IA e Visão Computacional
+
+### Contribuidores
+- [Flávio Araújo](https://github.com/flavio86) - Professor Orientador
+
 ## 📝 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## 📧 Contato
 
-Seu Nome - [@seu_twitter](https://twitter.com/seu_twitter) - email@exemplo.com
+**Luis Eduardo Silva Brito** - [@duardo10](https://github.com/duardo10) - duardos36@gmail.com
 
-Link do Projeto: [https://github.com/seu-usuario/glaucoma-vision-ai](https://github.com/seu-usuario/glaucoma-vision-ai)
+Link do Projeto: [https://github.com/duardo10/glaucoma-vision-ai](https://github.com/duardo10/glaucoma-vision-ai)
 
 ## 🙏 Agradecimentos
 
-- [Lista de agradecimentos]
-- [Instituições parceiras]
-- [Contribuidores]
+- [CNPq](https://www.gov.br/cnpq/) - Conselho Nacional de Desenvolvimento Científico e Tecnológico
+- [UFPI](https://www.ufpi.br/) - Universidade Federal do Piauí
+- Todos os professores e pesquisadores que contribuíram com seus conhecimentos
+- Comunidade open source que disponibiliza ferramentas essenciais para o desenvolvimento
 
 ---
 
