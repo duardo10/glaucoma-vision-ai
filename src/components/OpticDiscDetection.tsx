@@ -28,19 +28,22 @@ export default function OpticDiscDetection({
   if (isLoading) {
     return (
       <div className="card h-full flex flex-col items-center justify-center p-12">
-        <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-        <p className="mt-4 text-lg font-medium">Analisando imagem...</p>
-        <p className="text-sm text-gray-500">Detectando disco óptico</p>
+        <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mb-6"></div>
+        <h3 className="text-xl font-semibold mb-2 text-gray-900">Analisando imagem...</h3>
+        <p className="text-gray-500 text-center">
+          Nosso modelo de IA está detectando o disco óptico na sua imagem.
+          <br />Isso pode levar alguns segundos.
+        </p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="card h-full flex flex-col items-center justify-center p-12 border border-danger/20 bg-danger/5">
-        <div className="w-16 h-16 rounded-full bg-danger/10 flex items-center justify-center">
+      <div className="card h-full border-danger/20">
+        <div className="card-header bg-danger/5 border-danger/20 flex items-center space-x-2">
           <svg 
-            className="w-8 h-8 text-danger" 
+            className="w-5 h-5 text-danger" 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24" 
@@ -53,9 +56,32 @@ export default function OpticDiscDetection({
               d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
             />
           </svg>
+          <span className="font-medium text-danger">Erro na Detecção</span>
         </div>
-        <p className="mt-4 text-lg font-medium text-danger">Erro na detecção</p>
-        <p className="text-sm text-gray-700 text-center">{error}</p>
+        <div className="card-body">
+          <div className="flex flex-col items-center justify-center py-6">
+            <div className="w-16 h-16 rounded-full bg-danger/10 flex items-center justify-center mb-4">
+              <svg 
+                className="w-8 h-8 text-danger" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24" 
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
+                />
+              </svg>
+            </div>
+            <p className="text-gray-700 text-center max-w-md">{error}</p>
+            <button className="btn btn-outline btn-sm mt-6">
+              Tentar Novamente
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -65,26 +91,26 @@ export default function OpticDiscDetection({
   }
 
   return (
-    <div className="card">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold">Detecção do Disco Óptico</h3>
+    <div className="card h-full">
+      <div className="card-header flex items-center justify-between">
+        <h3 className="font-medium">Detecção do Disco Óptico</h3>
         
-        <div className="flex rounded-md overflow-hidden">
+        <div className="tab-group inline-flex rounded-md overflow-hidden border border-gray-200">
           <button
-            className={`px-3 py-1 text-sm ${
+            className={`px-3 py-1 text-sm font-medium ${
               view === 'original' 
                 ? 'bg-primary text-white' 
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
             }`}
             onClick={() => setView('original')}
           >
             Original
           </button>
           <button
-            className={`px-3 py-1 text-sm ${
+            className={`px-3 py-1 text-sm font-medium ${
               view === 'detection' 
                 ? 'bg-primary text-white' 
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
             }`}
             onClick={() => setView('detection')}
           >
@@ -93,20 +119,41 @@ export default function OpticDiscDetection({
         </div>
       </div>
       
-      <div className="relative w-full h-64 rounded-md overflow-hidden">
-        <Image 
-          src={view === 'original' ? originalImageUrl : resultImageUrl} 
-          alt={view === 'original' ? "Imagem original" : "Detecção do disco óptico"} 
-          fill
-          className="object-contain"
-        />
+      <div className="card-body p-0">
+        <div className="aspect-video relative w-full overflow-hidden border-t border-b border-gray-200">
+          <Image 
+            src={view === 'original' ? originalImageUrl : resultImageUrl} 
+            alt={view === 'original' ? "Imagem original" : "Detecção do disco óptico"} 
+            fill
+            className="object-contain"
+          />
+        </div>
       </div>
       
-      <div className="mt-4">
-        <p className="text-sm text-gray-500">
-          A detecção do disco óptico é uma etapa importante para o diagnóstico de glaucoma, 
-          pois alterações em sua aparência podem indicar danos ao nervo óptico.
-        </p>
+      <div className="card-footer bg-gray-50">
+        <div className="flex items-start gap-3">
+          <svg
+            className="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <div>
+            <p className="text-sm text-gray-700">
+              A detecção do disco óptico é fundamental para o diagnóstico do glaucoma. 
+              Nossa IA identifica alterações na proporção entre a escavação e o disco (relação E/D), 
+              um importante indicador de dano glaucomatoso ao nervo óptico.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

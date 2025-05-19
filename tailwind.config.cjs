@@ -8,11 +8,40 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#3b82f6',
-        secondary: '#10b981',
-        accent: '#8b5cf6',
-        danger: '#ef4444',
-        dark: '#1f2937',
+        primary: {
+          DEFAULT: 'var(--primary)',
+          light: 'var(--primary-light)',
+          dark: 'var(--primary-dark)',
+        },
+        secondary: {
+          DEFAULT: 'var(--secondary)',
+          light: 'var(--secondary-light)',
+          dark: 'var(--secondary-dark)',
+        },
+        accent: 'var(--accent)',
+        danger: {
+          DEFAULT: 'var(--danger)',
+          light: 'var(--danger-light)',
+        },
+        success: 'var(--success)',
+        warning: 'var(--warning)',
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+      },
+      boxShadow: {
+        'inner-strong': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+      },
+      fontFamily: {
+        sans: [
+          'system-ui',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"Segoe UI"',
+          'Roboto',
+          '"Helvetica Neue"',
+          'Arial',
+          'sans-serif',
+        ],
       },
     },
   },
