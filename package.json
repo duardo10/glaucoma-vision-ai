@@ -1,0 +1,35 @@
+{
+  "name": "glaucoma-vision-ai",
+  "version": "1.0.0",
+  "description": "Site para análise de imagens de retina para diagnóstico de glaucoma",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [
+    "glaucoma",
+    "ai",
+    "retina",
+    "medical",
+    "diagnostic"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "next": "^14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.3.3",
+    "@types/react": "^18.2.47",
+    "@types/node": "^20.11.0",
+    "@types/react-dom": "^18.2.18"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.32",
+    "autoprefixer": "^10.4.16"
+  }
+}
