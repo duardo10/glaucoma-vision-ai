@@ -2,11 +2,13 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { NewAnalysisContext } from '@/app/page';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const handleNewAnalysis = useContext(NewAnalysisContext);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -75,9 +77,12 @@ export default function Header() {
           
           {/* Botão de ação principal */}
           <div className="flex items-center gap-4">
-            <Link href="#analise" className="hidden md:block btn btn-primary btn-sm shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 transform">
+            <button
+              className="hidden md:block btn btn-primary btn-sm shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 transform"
+              onClick={handleNewAnalysis}
+            >
               Nova Análise
-            </Link>
+            </button>
             
             {/* Botão do menu mobile */}
             <button 
@@ -130,9 +135,9 @@ export default function Header() {
               Sobre
             </Link>
             <div className="mt-3 px-4 py-3 bg-gray-50 rounded-md">
-              <Link href="#analise" className="w-full btn btn-primary text-center shadow-sm" onClick={() => setMobileMenuOpen(false)}>
+              <button className="w-full btn btn-primary text-center shadow-sm" onClick={() => { setMobileMenuOpen(false); handleNewAnalysis(); }}>
                 Nova Análise
-              </Link>
+              </button>
             </div>
           </div>
         )}

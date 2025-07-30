@@ -16,33 +16,34 @@ export interface GlaucomaDiagnosisResult {
 
 // Função para detecção do disco óptico
 export async function detectOpticDisc(imageFile: File): Promise<OpticDiscDetectionResult> {
-  // Simulação do processamento de detecção
-  await sleep(2000);
-  
-  // Em um ambiente real, isso seria substituído pelo upload da imagem para um servidor
-  // e pelo processamento real do modelo de IA
-  
-  // Simulação do resultado
-  // Em um ambiente real, a URL viria do servidor após o processamento
-  return {
-    resultImageUrl: URL.createObjectURL(imageFile),
-  };
+  const formData = new FormData();
+  formData.append('file', imageFile);
+
+  const response = await fetch('http://127.0.0.1:8000/api/detect-optic-disc', {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error('Erro ao detectar disco óptico');
+  }
+
+  return await response.json();
 }
 
 // Função para diagnóstico de glaucoma
 export async function diagnosisGlaucoma(imageFile: File): Promise<GlaucomaDiagnosisResult> {
-  // Simulação do processamento de diagnóstico
-  await sleep(3000);
-  
-  // Em um ambiente real, isso seria substituído pelo upload da imagem para um servidor
-  // e pelo processamento real do modelo de IA
-  
-  // Simulando um resultado aleatório para demonstração
-  const isPositive = Math.random() > 0.5;
-  const confidence = Math.floor(Math.random() * 30) + 70; // Entre 70% e 99%
-  
-  return {
-    isPositive,
-    confidence,
-  };
+  const formData = new FormData();
+  formData.append('file', imageFile);
+
+  const response = await fetch('http://127.0.0.1:8000/api/diagnosis-glaucoma', {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error('Erro ao realizar diagnóstico de glaucoma');
+  }
+
+  return await response.json();
 } 

@@ -3,21 +3,46 @@
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
+const backendUrl = "http://localhost:8000";
+
 interface OpticDiscDetectionProps {
   originalImageUrl: string;
   resultImageUrl?: string; // URL da imagem com a marcação do disco óptico
   isLoading: boolean;
   error?: string;
+  detections?: Array<{
+    box: [number, number, number, number];
+    confidence: number;
+    class: string;
+  }>;
 }
 
 export default function OpticDiscDetection({ 
   originalImageUrl, 
   resultImageUrl, 
   isLoading, 
-  error 
+  error, 
+  detections
 }: OpticDiscDetectionProps) {
   const [view, setView] = useState<'original' | 'detection'>('detection');
   
+  // Retry logic para imagem de detecção
+  const [imgSrc, setImgSrc] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    if (view === 'detection' && resultImageUrl) {
+      setImgSrc(resultImageUrl.startsWith('/static/') ? `${backendUrl}${resultImageUrl}` : resultImageUrl);
+    } else if (view === 'original' && originalImageUrl) {
+      setImgSrc(originalImageUrl.startsWith('/static/') ? `${backendUrl}${originalImageUrl}` : originalImageUrl);
+    }
+  }, [view, resultImageUrl, originalImageUrl]);
+
+  const handleImageError = () => {
+    // Retry após 300ms
+    setTimeout(() => {
+      setImgSrc((prev) => prev ? prev + `?retry=${Date.now()}` : prev);
+    }, 300);
+  };
+
   useEffect(() => {
     // Resetar para a visualização de detecção quando novos resultados chegarem
     if (resultImageUrl) {
@@ -122,37 +147,54 @@ export default function OpticDiscDetection({
       <div className="card-body p-0">
         <div className="aspect-video relative w-full overflow-hidden border-t border-b border-gray-200">
           <Image 
-            src={view === 'original' ? originalImageUrl : resultImageUrl} 
+            src={imgSrc || ''}
             alt={view === 'original' ? "Imagem original" : "Detecção do disco óptico"} 
             fill
             className="object-contain"
+            onError={handleImageError}
           />
         </div>
       </div>
       
       <div className="card-footer bg-gray-50">
-        <div className="flex items-start gap-3">
-          <svg
-            className="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <div>
-            <p className="text-sm text-gray-700">
-              A detecção do disco óptico é fundamental para o diagnóstico do glaucoma. 
-              Nossa IA identifica alterações na proporção entre a escavação e o disco (relação E/D), 
-              um importante indicador de dano glaucomatoso ao nervo óptico.
-            </p>
+        <div className="flex flex-col gap-3">
+          <div className="flex items-start gap-3">
+            <svg
+              className="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <div>
+              <p className="text-sm text-gray-700">
+                A detecção do disco óptico é fundamental para o diagnóstico do glaucoma. 
+                Nossa IA identifica alterações na proporção entre a escavação e o disco (relação E/D), 
+                um importante indicador de dano glaucomatoso ao nervo óptico.
+              </p>
+            </div>
           </div>
+          {detections && detections.length > 0 && (
+            <div className="mt-2">
+              <h4 className="font-semibold text-sm mb-1">Estatísticas da Detecção:</h4>
+              <ul className="text-xs text-gray-700 space-y-1">
+                {detections.map((det, idx) => (
+                  <li key={idx} className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
+                    <span><b>Classe:</b> {det.class}</span>
+                    <span><b>Confiança:</b> {(det.confidence * 100).toFixed(2)}%</span>
+                    <span><b>Box:</b> [{det.box.join(', ')}]</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>

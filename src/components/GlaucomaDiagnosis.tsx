@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 interface GlaucomaDiagnosisProps {
   isPositive?: boolean;
-  confidence?: number;
+  confidence?: string | number;
   isLoading: boolean;
   error?: string;
 }
@@ -15,24 +15,9 @@ export default function GlaucomaDiagnosis({
   isLoading,
   error
 }: GlaucomaDiagnosisProps) {
-  const [animatedConfidence, setAnimatedConfidence] = useState(0);
-  
-  useEffect(() => {
-    if (confidence !== undefined) {
-      const interval = setInterval(() => {
-        setAnimatedConfidence(prev => {
-          const next = prev + 1;
-          if (next >= confidence) {
-            clearInterval(interval);
-            return confidence;
-          }
-          return next;
-        });
-      }, 20);
-      
-      return () => clearInterval(interval);
-    }
-  }, [confidence]);
+  // Garantir que a barra nunca ultrapasse 100%
+  const confidenceNumber = typeof confidence === 'string' ? parseFloat(confidence.replace(',', '.')) : confidence;
+  const barConfidence = confidenceNumber !== undefined ? Math.min(confidenceNumber, 100) : 0;
   
   if (isLoading) {
     return (
@@ -163,12 +148,12 @@ export default function GlaucomaDiagnosis({
           <div className="w-full mb-6">
             <div className="flex justify-between text-sm mb-1">
               <span className="font-medium">Confiança do diagnóstico</span>
-              <span className={`font-bold ${isPositive ? 'text-danger' : 'text-secondary'}`}>{animatedConfidence}%</span>
+              <span className={`font-bold ${isPositive ? 'text-danger' : 'text-secondary'}`}>{confidence}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
               <div 
                 className={`h-2.5 rounded-full transition-all duration-300 ${isPositive ? 'bg-danger' : 'bg-secondary'}`} 
-                style={{ width: `${animatedConfidence}%` }}
+                style={{ width: `${barConfidence}%` }}
               ></div>
             </div>
           </div>

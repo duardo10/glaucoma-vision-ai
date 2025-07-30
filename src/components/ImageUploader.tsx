@@ -1,18 +1,29 @@
 "use client";
 
-import { useState, useRef, ChangeEvent } from 'react';
+import { useState, useRef, ChangeEvent, useEffect } from 'react';
 import Image from 'next/image';
 import { formatFileSize } from '@/utils/helpers';
 
 interface ImageUploaderProps {
   onImageSelected: (file: File, previewUrl: string) => void;
+  backendUrl?: string;
+  reset?: boolean;
 }
 
-export default function ImageUploader({ onImageSelected }: ImageUploaderProps) {
+export default function ImageUploader({ onImageSelected, backendUrl = "http://localhost:8000", reset }: ImageUploaderProps) {
   const [dragActive, setDragActive] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [fileDetails, setFileDetails] = useState<{name: string, size: number} | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Limpar preview e input quando reset mudar
+  useEffect(() => {
+    setPreviewUrl(null);
+    setFileDetails(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  }, [reset]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -106,7 +117,7 @@ export default function ImageUploader({ onImageSelected }: ImageUploaderProps) {
               <div className="p-4">
                 <div className="relative w-full h-64 mx-auto mb-4 rounded-md overflow-hidden border border-gray-200">
                   <Image 
-                    src={previewUrl} 
+                    src={previewUrl.startsWith('/static/') ? `${backendUrl}${previewUrl}` : previewUrl}
                     alt="Preview da imagem" 
                     fill
                     className="object-contain"
