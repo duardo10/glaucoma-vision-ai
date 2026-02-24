@@ -1,119 +1,148 @@
-# 🏥 Glaucoma Vision AI
+# Glaucoma Vision AI
 
 <div align="center">
 
-![Glaucoma Vision AI](https://img.shields.io/badge/Glaucoma-Vision%20AI-blue)
-![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow)
-![Licença](https://img.shields.io/badge/Licença-MIT-green)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Status](https://img.shields.io/badge/status-in%20development-yellow)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+Intelligent platform for glaucoma diagnosis and progression monitoring using computer vision and deep learning.
 
 </div>
 
-## 📋 Sobre o Projeto
+---
 
-O Glaucoma Vision AI é uma aplicação inovadora que utiliza inteligência artificial para auxiliar no diagnóstico e monitoramento do glaucoma, uma das principais causas de cegueira irreversível no mundo. Este projeto visa fornecer ferramentas avançadas de análise de imagens oculares para profissionais da saúde.
+## Overview
 
-## 🚀 Funcionalidades
+Glaucoma Vision AI is a clinical decision-support system designed to assist healthcare professionals in the early detection and longitudinal monitoring of glaucoma — one of the leading causes of irreversible blindness worldwide. The platform combines state-of-the-art deep learning models with an intuitive interface to deliver automated analysis of ocular fundus images with clinical-grade reliability.
 
-- 🔍 Análise automática de imagens oculares
-- 📊 Geração de relatórios detalhados
-- 📈 Monitoramento da progressão do glaucoma
-- 🤖 Integração com modelos de IA para diagnóstico
-- 📱 Interface amigável e responsiva
+## Features
 
-## 🛠️ Tecnologias Utilizadas
+- Automated segmentation and analysis of ocular fundus images
+- Cup-to-disc ratio (CDR) estimation via deep learning
+- Glaucoma progression tracking over time
+- Detailed diagnostic report generation
+- REST API for integration with clinical systems
+- Responsive web interface for clinical environments
 
-- **Frontend**: React.js, TypeScript, TailwindCSS
-- **Backend**: Python, FastAPI
-- **IA/ML**: TensorFlow, PyTorch
-- **Banco de Dados**: PostgreSQL
-- **DevOps**: Docker, GitHub Actions
+## Tech Stack
 
-## 📦 Estrutura do Projeto
+| Layer | Technologies |
+|---|---|
+| Frontend | React.js, TypeScript, TailwindCSS |
+| Backend | Python, FastAPI |
+| AI / ML | TensorFlow, PyTorch |
+| Database | PostgreSQL |
+| Infrastructure | Docker, GitHub Actions |
 
+## Project Structure
 ```
-src/
-├── app/          # Aplicação principal
-├── components/   # Componentes reutilizáveis
-├── services/     # Serviços e integrações
-└── utils/        # Utilitários e helpers
+glaucoma-vision-ai/
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── services/
+│   └── public/
+├── backend/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── models/
+│   │   └── utils/
+│   ├── main.py
+│   └── requirements.txt
+└── docker-compose.yml
 ```
 
-## 🚀 Como Executar
+## Getting Started
 
-### Pré-requisitos
+### Prerequisites
 
-- Node.js (v18 ou superior)
-- Python (v3.9 ou superior)
-- Docker (opcional)
+- Node.js v18+
+- Python 3.9+
+- Docker (optional)
 
-### Instalação
+### Installation
 
-1. Clone o repositório:
+**1. Clone the repository**
 ```bash
-git clone https://github.com/seu-usuario/glaucoma-vision-ai.git
+git clone https://github.com/duardo10/glaucoma-vision-ai.git
 cd glaucoma-vision-ai
 ```
 
-2. Instale as dependências do frontend:
-```bash
-npm install
-```
-
-3. Instale as dependências do backend:
-```bash
-pip install -r requirements.txt
-```
-
-4. Configure as variáveis de ambiente:
+**2. Configure environment variables**
 ```bash
 cp .env.example .env
 ```
 
-5. Inicie a aplicação:
+**3. Install frontend dependencies**
 ```bash
-# Frontend
-npm run dev
-
-# Backend
-python src/app/main.py
+cd frontend
+npm install
 ```
 
-## 🤝 Como Contribuir
+**4. Install backend dependencies**
+```bash
+cd backend
+pip install -r requirements.txt
+```
 
-1. Faça um Fork do projeto
-2. Crie uma Branch para sua Feature (`git checkout -b feature/AmazingFeature`)
-3. Faça o Commit das suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Faça o Push para a Branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
+### Running the Application
 
-## 👥 Equipe e Contribuidores
+**Backend** — starts on `http://localhost:8000`
+```bash
+cd backend
+uvicorn main:app --reload
+```
 
-### Equipe Principal
-- [Luis Eduardo Silva Brito](https://github.com/duardo10) - Desenvolvedor Full Stack
-- [Jeanderson Gomes de Sousa](https://github.com/JeandsGomes) - Desenvolvedor Back-End especializado em IA e Visão Computacional
+**Frontend** — starts on `http://localhost:3000`
+```bash
+cd frontend
+npm run dev
+```
 
-### Contribuidores
-- [Flávio Araújo](https://github.com/flavio86) - Professor Orientador
+API documentation is available at `http://localhost:8000/docs` via Swagger UI.
 
-## 📝 Licença
+## Contributing
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+Contributions are welcome. Please follow the steps below:
 
-## 📧 Contato
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature-name`
+3. Commit your changes: `git commit -m 'feat: add your feature description'`
+4. Push to the branch: `git push origin feature/your-feature-name`
+5. Open a Pull Request describing your changes
 
-**Luis Eduardo Silva Brito** - [@duardo10](https://github.com/duardo10) - duardos36@gmail.com
+Please follow [Conventional Commits](https://www.conventionalcommits.org/) for commit messages.
 
-Link do Projeto: [https://github.com/duardo10/glaucoma-vision-ai](https://github.com/duardo10/glaucoma-vision-ai)
+## Team
 
-## 🙏 Agradecimentos
+**Core Developers**
 
-- [CNPq](https://www.gov.br/cnpq/) - Conselho Nacional de Desenvolvimento Científico e Tecnológico
-- [UFPI](https://www.ufpi.br/) - Universidade Federal do Piauí
-- Todos os professores e pesquisadores que contribuíram com seus conhecimentos
-- Comunidade open source que disponibiliza ferramentas essenciais para o desenvolvimento
+- [Luis Eduardo Silva Brito](https://github.com/duardo10) — Full Stack Developer
+- [Jeanderson Gomes de Sousa](https://github.com/JeandsGomes) — Back-End Developer, AI & Computer Vision
+
+**Academic Advisor**
+
+- [Flávio Araújo](https://github.com/flavio86) — Professor & Research Supervisor
+
+## Acknowledgements
+
+This project was developed under the support of:
+
+- [CNPq](https://www.gov.br/cnpq/) — Brazilian National Council for Scientific and Technological Development
+- [UFPI](https://www.ufpi.br/) — Federal University of Piauí
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+Luis Eduardo Silva Brito — [duardos36@gmail.com](mailto:duardos36@gmail.com) — [@duardo10](https://github.com/duardo10)
 
 ---
 
 <div align="center">
-  <sub>Construído com ❤️ pela equipe Glaucoma Vision AI</sub>
+  <sub>Glaucoma Vision AI — Federal University of Piaui, Brazil</sub>
 </div>
