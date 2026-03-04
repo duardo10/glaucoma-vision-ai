@@ -101,8 +101,6 @@ cd frontend
 npm run dev
 ```
 
-API documentation is available at `http://localhost:8000/docs` via Swagger UI.
-
 ## Contributing
 
 Contributions are welcome. Please follow the steps below:
