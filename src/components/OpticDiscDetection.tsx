@@ -150,6 +150,7 @@ export default function OpticDiscDetection({
             src={imgSrc || ''}
             alt={view === 'original' ? "Imagem original" : "Detecção do disco óptico"} 
             fill
+            unoptimized 
             className="object-contain"
             onError={handleImageError}
           />

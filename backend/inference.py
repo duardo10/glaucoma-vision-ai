@@ -1,8 +1,5 @@
 """
 Pipeline de inferencia: YOLOv8n (deteccao do disco optico) + ResNet50 (classificacao de glaucoma).
-
-Cole aqui a logica exata que voce ja usa no backend local. A estrutura abaixo
-segue o fluxo que voce descreveu e ja bate com o formato que o front espera.
 """
 
 import io
@@ -15,6 +12,7 @@ import torch
 import torchvision.models
 from torchvision import transforms
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 CLASSES = ["normal", "glaucoma"]  # Confirme a ordem usada no treinamento.
@@ -39,11 +37,18 @@ transform = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
 ])
 
+
 def _rodar_yolo(imagem: Image.Image):
     """Roda o YOLOv8n e retorna a lista de detections + a melhor box (para recorte da ROI)."""
     conf_threshold = float(os.getenv("YOLO_CONF_THRESHOLD", "0.05"))
+
+    # IMPORTANTE: o Ultralytics espera arrays numpy em BGR (convencao do OpenCV).
+    # PIL abre e converte em RGB, entao invertemos os canais aqui antes de passar pro modelo.
+    # Sem isso, o YOLO recebe as cores trocadas e a deteccao fica prejudicada (poucas ou nenhuma caixa).
+    imagem_bgr = np.ascontiguousarray(np.array(imagem)[:, :, ::-1])
+
     resultados = yolo_model.predict(
-        np.array(imagem),
+        imagem_bgr,
         conf=conf_threshold,
         imgsz=640,
         verbose=False,
@@ -109,7 +114,8 @@ def diagnosticar_glaucoma(imagem_bytes: bytes) -> dict:
     imagem = Image.open(io.BytesIO(imagem_bytes)).convert("RGB")
     _, bbox = _rodar_yolo(imagem)
 
-    if bbox is None:
+    usou_fallback = bbox is None
+    if usou_fallback:
         logger.warning(
             "YOLO nao encontrou o disco optico; classificando a imagem completa como fallback."
         )
@@ -126,6 +132,13 @@ def diagnosticar_glaucoma(imagem_bytes: bytes) -> dict:
         confianca = float(probs[indice_classe])
 
     classe = CLASSES[indice_classe]
+    logger.info(
+        "ResNet50: classe=%s, prob_normal=%.4f, prob_glaucoma=%.4f, entrada=%s",
+        classe,
+        float(probs[0]),
+        float(probs[1]),
+        "imagem_completa_fallback" if usou_fallback else "roi_yolo",
+    )
     return {
         "isPositive": classe == "glaucoma",
         "confidence": round(confianca * 100, 2),  # front espera 0-100
