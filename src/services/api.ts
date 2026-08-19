@@ -6,6 +6,11 @@ import { sleep } from '@/utils/helpers';
 // Tipo para o resultado da detecção do disco óptico
 export interface OpticDiscDetectionResult {
   resultImageUrl: string;
+  detections?: Array<{
+    box: [number, number, number, number];
+    confidence: number;
+    class: string;
+  }>;
 }
 
 // Tipo para o resultado do diagnóstico de glaucoma

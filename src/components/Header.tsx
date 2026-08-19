@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect, useContext } from 'react';
-import { NewAnalysisContext } from '@/app/page';
+import { NewAnalysisContext } from '@/utils/analysis-context';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

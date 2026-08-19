@@ -8,10 +8,7 @@ import ImageUploader from '@/components/ImageUploader';
 import OpticDiscDetection from '@/components/OpticDiscDetection';
 import GlaucomaDiagnosis from '@/components/GlaucomaDiagnosis';
 import { detectOpticDisc, diagnosisGlaucoma } from '@/services/api';
-import { createContext, useContext } from 'react';
-
-// Contexto para reset global
-export const NewAnalysisContext = createContext<() => void>(() => {});
+import { NewAnalysisContext } from '@/utils/analysis-context';
 
 export default function Home() {
   const [originalImageUrl, setOriginalImageUrl] = useState<string | null>(null);
