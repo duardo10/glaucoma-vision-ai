@@ -5,5 +5,7 @@ services:
       dockerfile: DOCKERFILE
     ports:
       - "8000:8000"
+    environment:
+      YOLO_CONF_THRESHOLD: "0.05"
     volumes:
       - ./models:/code/models:ro

@@ -6,12 +6,16 @@ segue o fluxo que voce descreveu e ja bate com o formato que o front espera.
 """
 
 import io
+import logging
+import os
 import numpy as np
 from PIL import Image, ImageDraw
 from ultralytics import YOLO
 import torch
 import torchvision.models
 from torchvision import transforms
+
+logger = logging.getLogger(__name__)
 
 CLASSES = ["normal", "glaucoma"]  # Confirme a ordem usada no treinamento.
 
@@ -37,8 +41,21 @@ transform = transforms.Compose([
 
 def _rodar_yolo(imagem: Image.Image):
     """Roda o YOLOv8n e retorna a lista de detections + a melhor box (para recorte da ROI)."""
-    resultados = yolo_model.predict(np.array(imagem), verbose=False)
+    conf_threshold = float(os.getenv("YOLO_CONF_THRESHOLD", "0.05"))
+    resultados = yolo_model.predict(
+        np.array(imagem),
+        conf=conf_threshold,
+        imgsz=640,
+        verbose=False,
+    )
     boxes = resultados[0].boxes
+
+    logger.info(
+        "YOLO: %d deteccao(oes), confianca maxima=%s, limiar=%.3f",
+        len(boxes),
+        f"{float(boxes.conf.max()):.4f}" if len(boxes) else "nenhuma",
+        conf_threshold,
+    )
 
     detections = []
     for box in boxes:
@@ -93,10 +110,13 @@ def diagnosticar_glaucoma(imagem_bytes: bytes) -> dict:
     _, bbox = _rodar_yolo(imagem)
 
     if bbox is None:
-        raise ValueError("Nenhuma regiao de interesse (disco optico) detectada na imagem.")
-
-    x1, y1, x2, y2 = bbox
-    roi = imagem.crop((x1, y1, x2, y2))
+        logger.warning(
+            "YOLO nao encontrou o disco optico; classificando a imagem completa como fallback."
+        )
+        roi = imagem
+    else:
+        x1, y1, x2, y2 = bbox
+        roi = imagem.crop((x1, y1, x2, y2))
 
     tensor = transform(roi).unsqueeze(0)
     with torch.no_grad():
