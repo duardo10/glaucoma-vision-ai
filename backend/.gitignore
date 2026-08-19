@@ -1,6 +1,5 @@
-secrets/
-app/models/*.pt
-app/models/*.pth
+models/*.pt
+models/*.pth
 __pycache__/
 *.pyc
 .env

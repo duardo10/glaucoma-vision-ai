@@ -1,5 +1,5 @@
 """
-Backend de diagnostico de glaucoma - FastAPI + Firebase
+Backend de diagnostico de glaucoma - FastAPI
 Endpoints usados pelo front (services/api.ts):
   POST /api/detect-optic-disc   -> multipart "file" -> { resultImageUrl, detections }
   POST /api/diagnosis-glaucoma  -> multipart "file" -> { isPositive, confidence }
@@ -8,9 +8,9 @@ Endpoints usados pelo front (services/api.ts):
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import Optional
+import base64
 
-from firebase_service import upload_imagem
 from inference import detectar_disco_optico, diagnosticar_glaucoma
 
 app = FastAPI(title="Glaucoma Diagnosis API")
@@ -47,11 +47,12 @@ async def detect_optic_disc(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro na deteccao do disco optico: {e}")
 
-    # Sobe a imagem anotada (com a caixa desenhada) para o Firebase Storage
-    url_imagem_anotada = upload_imagem(resultado["imagem_anotada_bytes"], prefixo="anotadas")
+    # Retorna a imagem no proprio JSON; nenhum storage externo e necessario.
+    imagem_base64 = base64.b64encode(resultado["imagem_anotada_bytes"]).decode("ascii")
+    data_url = f"data:image/jpeg;base64,{imagem_base64}"
 
     return DetectOpticDiscResponse(
-        resultImageUrl=url_imagem_anotada,
+        resultImageUrl=data_url,
         detections=resultado["detections"],
     )
 
@@ -66,9 +67,6 @@ async def diagnosis_glaucoma(file: UploadFile = File(...)):
         raise HTTPException(status_code=422, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro no diagnostico: {e}")
-
-    # Guarda a imagem original enviada (para poder carregar depois, se precisar)
-    upload_imagem(imagem_bytes, prefixo="originais")
 
     return DiagnosisResponse(
         isPositive=resultado["isPositive"],

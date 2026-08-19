@@ -5,11 +5,5 @@ services:
       dockerfile: DOCKERFILE
     ports:
       - "8000:8000"
-    environment:
-      - FIREBASE_CREDENTIALS_PATH=/secrets/serviceAccountKey.json
-      - FIREBASE_STORAGE_BUCKET=SEU_PROJETO.appspot.com
     volumes:
-      # Baixe a chave no Firebase Console > Configuracoes do projeto > Contas de servico
-      # e coloque em ./secrets/serviceAccountKey.json (nunca commitar no git)
-      - ./secrets/serviceAccountKey.json:/secrets/serviceAccountKey.json:ro
       - ./models:/code/models:ro
