@@ -37,12 +37,12 @@ Exemplo de resposta:
 Os arquivos esperados sao:
 
 ```text
-models/best.pt
-models/fold_4_last.pth
+models/DeteccaoYOLOv8n.pt
+models/ClassificacaoResnet50.pth
 ```
 
-O codigo carrega `best.pt` como YOLO e `fold_4_last.pth` como `state_dict` de
-uma ResNet50 com duas classes. Confirme antes de usar:
+O codigo carrega `DeteccaoYOLOv8n.pt` como YOLO e `ClassificacaoResnet50.pth`
+como `state_dict` de uma ResNet50 com duas classes. Confirme antes de usar:
 
 - O pre-processamento usado no treinamento.
 - A ordem de `CLASSES` em `backend/inference.py`.
